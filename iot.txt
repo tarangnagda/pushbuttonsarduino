@@ -1,0 +1,227 @@
+#include <LiquidCrystal.h>
+LiquidCrystal lcd(12, 11, 5, 4, 3, 2 );
+int button1=8;
+int button2=10;
+int button3=7;
+int button4=13;
+int result=14;
+int buzzer=A1;
+int val1=0;
+int val2=0;
+int val3=0;
+int val4=0;
+int c1=0;
+int c2=0;
+int c3=0;
+int c4=0;
+int res=0;
+int votesForFirstCandidate=0;
+int votesForSecondCandidate=0;
+int votesForThirdCandidate=0;
+int votesForFourthCandidate=0;
+int flagOnce=0;
+
+void setup() {
+  Serial.begin(9600);
+  analogWrite(6,20);
+  lcd.begin(16, 2);
+  pinMode(button1,OUTPUT);
+  pinMode(button2,OUTPUT);
+  pinMode(button3,OUTPUT);
+  pinMode(button4,OUTPUT);
+  pinMode(result,OUTPUT);
+}
+
+
+void loop() {
+  //tone(buzzer,1000, 2000);
+  val1=digitalRead(button1);
+  val2=digitalRead(button2);
+  val3=digitalRead(button3);
+  val4=digitalRead(button4);
+  res=digitalRead(result);
+  if((val1==1||val2==1||val3==1||val4==1)&&flagOnce==0){
+    start();   
+//    flagOnce++;
+    delay(250);
+  }
+  
+  if(res==HIGH){
+    flagOnce=1;
+    Serial.println("BJP:");
+    Serial.println(votesForFirstCandidate);
+    Serial.println("CNG:");
+    Serial.println(votesForSecondCandidate);
+    Serial.println("AAP:");
+    Serial.println(votesForThirdCandidate);
+    Serial.println("OTH:");
+    Serial.println(votesForFourthCandidate);
+
+    //analogWrite(6,20);
+    //lcd.begin(16, 2);
+
+    lcd.setCursor(0,0);
+    lcd.print("                ");
+
+    
+    lcd.setCursor(0,1);
+    lcd.print("                ");
+     
+    lcd.setCursor(0,0);
+    lcd.print("BJP");
+  
+    lcd.setCursor(4,0);
+    lcd.print("CNG");
+  
+    lcd.setCursor(8,0);
+    lcd.print("AAP");
+  
+    lcd.setCursor(12,0);
+    lcd.print("OTH");
+  
+    lcd.setCursor(0,1);
+    lcd.print(votesForFirstCandidate);
+  
+    
+    lcd.setCursor(4,1);
+    lcd.print(votesForSecondCandidate);
+  
+    
+    lcd.setCursor(8,1);
+    lcd.print(votesForThirdCandidate);
+  
+    
+    lcd.setCursor(12,1);
+    lcd.print(votesForFourthCandidate);
+    
+    
+    delay(10000);
+      
+    flagOnce++;
+}
+  //lcd.setCursor(0,0);
+  //lcd.print(votesForFirstCandidate);
+
+  //lcd.setCursor(2,0);
+  //lcd.print(votesForSecondCandidate);
+
+  //lcd.setCursor(4,0);
+  //lcd.print(votesForThirdCandidate);
+
+  //lcd.setCursor(8,0);
+  //lcd.print(votesForFourthCandidate);
+//delay(10000);
+}
+
+
+void start(){
+  //Serial.println(val1);
+  //Serial.println(val2);
+  //Serial.println(val3);
+  //Serial.println(val4);
+  if(val1==1)
+  {
+    ++c1; 
+    //Serial.println(c1); 
+  }
+  
+  if(val2==1)
+  {
+    ++c2;
+    //Serial.println(c2); 
+  }
+  
+  if(val3==1)
+  {
+    ++c3;
+    //Serial.println(c3); 
+  }
+  
+  if(val4==1)
+  {
+    ++c4;
+    //Serial.println(c4); 
+  }
+  count();
+} 
+
+
+void count(){
+  //Serial.println("Entered count");
+  analogWrite(6,20);
+    lcd.begin(16, 2);
+  if(c1!=0){
+    
+    lcd.setCursor(0,0);
+    lcd.print("You have voted");
+
+    lcd.setCursor(0,1);
+    lcd.print("for BJP!");
+
+    Serial.println("You have voted for BJP!");
+    
+    votesForFirstCandidate++;
+  }else if(c2!=0){
+   // Serial.println("Candidate-2");
+
+
+
+   
+//Serial.write(12);
+//Serial.print("[2J");
+//Serial.write(12);
+//Serial.print("[H");
+    
+    lcd.setCursor(0,0);
+    lcd.print("You have voted");
+
+
+    lcd.setCursor(0,1);
+    lcd.print("for CNG!");
+    Serial.println("You have voted for CNG!");
+    
+    votesForSecondCandidate++;    
+  }else if(c3!=0){
+    //Serial.println("Candidate-3");
+
+
+lcd.setCursor(0,0);
+
+
+
+
+    lcd.print("You have voted");
+
+    lcd.setCursor(0,1);
+    lcd.print("for AAP!");
+    
+    
+    votesForThirdCandidate++;
+
+    Serial.println("You have voted for AAP!");
+  }else if(c4!=0){
+    //Serial.println("Candidate-4");
+
+
+lcd.setCursor(0,0);
+    lcd.print("You have voted");
+
+    lcd.setCursor(0,1);
+    lcd.print("for OTH!");
+    
+    
+    votesForFourthCandidate++;
+    Serial.println("You have voted for OTH!");
+  }
+  c1=0;
+  c2=0;
+  c3=0;
+  c4=0;
+}
+
+//void printCount(){
+//  Serial.println("Candidate1 : "+ %c1);
+//  Serial.println("Candidate2 : "+ %c2);
+//  Serial.println("Candidate3 : "+ %c3);
+//  Serial.println("Candidate4 : "+ %c4);
+//}
